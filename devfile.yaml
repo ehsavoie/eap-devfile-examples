@@ -121,30 +121,12 @@ commands:
       group:
         kind: run
         isDefault: false
-  # - id: create-target-namespace
-  #   exec:
-  #     label: "OuterLoop 00 - Create target namespace on OpenShift."
-  #     component: tools
-  #     workingDir: ${PROJECT_SOURCE}
-  #     commandLine: "oc new-project ${TARGET_NAMESPACE}"
-  #     group:
-  #       kind: run
-  #       isDefault: false
-  # - id: deploy-image
-  #   exec:
-  #     label: "OuterLoop 01 - Deploy Image into OpenShift."
-  #     component: tools
-  #     workingDir: ${PROJECT_SOURCE}
-  #     commandLine: "helm repo add jboss https://jbossas.github.io/eap-charts/ && helm install ${IMAGE} --namespace=${TARGET_NAMESPACE} -f .charts/helm.yaml jboss/eap8"
-  #     group:
-  #       kind: run
-  #       isDefault: false
   - id: deploy-image
     exec:
       label: "OuterLoop 01 - Deploy Image into OpenShift."
       component: tools
       workingDir: ${PROJECT_SOURCE}
-      commandLine: "export IMAGE_REGISTRY_NAMESPACE=$(oc project -q) && helm repo add jboss https://jbossas.github.io/eap-charts/ && helm install ${IMAGE} --namespace=${IMAGE_REGISTRY_NAMESPACE} -f .charts/helm.yaml jboss/eap8"
+      commandLine: "export TARGET_NAMESPACE=$(oc project -q) && helm repo add jboss https://jbossas.github.io/eap-charts/ && helm install ${IMAGE} --namespace=${TARGET_NAMESPACE} -f .charts/helm.yaml jboss/eap8"
       group:
         kind: run
         isDefault: false
@@ -157,53 +139,3 @@ commands:
       group:
         kind: run
         isDefault: false
-  # - id: build-runtime-image
-  #   exec:
-  #     label: "OuterLoop 01 - Build Runtime Image."
-  #     component: tools
-  #     commandLine: "export IMAGE_REGISTRY_NAMESPACE=$(oc project -q) && podman build --tls-verify=false -f Containerfile -t ${IMAGE_REGISTRY}/${IMAGE_REGISTRY_NAMESPACE}/${IMAGE} ."
-  #     workingDir: ${PROJECT_SOURCE}
-  #     group:
-  #       kind: build
-  #       isDefault: false
-  # - id: push-image
-  #   exec:
-  #     label: "OuterLoop 02 - Push Image into OpenShift image registry."
-  #     component: tools
-  #     workingDir: ${PROJECT_SOURCE}
-  #     commandLine: "export IMAGE_REGISTRY_NAMESPACE=$(oc project -q) &&  oc registry login --skip-check --registry=${IMAGE_REGISTRY} && podman tag ${IMAGE_REGISTRY}/${IMAGE_REGISTRY_NAMESPACE}/${IMAGE} ${IMAGE_REGISTRY}/${IMAGE_REGISTRY_NAMESPACE}/${IMAGE}:latest && podman push --tls-verify=false ${IMAGE_REGISTRY}/${IMAGE_REGISTRY_NAMESPACE}/${IMAGE}:latest"
-  #     group:
-  #       kind: build
-  #       isDefault: false
-  # - id: deploy-image
-  #   exec:
-  #     label: "OuterLoop 03 - Deploy Image into OpenShift."
-  #     component: tools
-  #     workingDir: ${PROJECT_SOURCE}
-  #     commandLine: "helm repo add jboss https://jbossas.github.io/eap-charts/ && helm install ${IMAGE} -f .charts/helm.yaml jboss/eap8"
-  #     group:
-  #       kind: run
-  #       isDefault: false
-  # - id: undeploy-image
-  #   exec:
-  #     label: "OuterLoop 04 - Undeploy Image from OpenShift."
-  #     component: tools
-  #     workingDir: ${PROJECT_SOURCE}
-  #     commandLine: "helm uninstall ${IMAGE}"
-  #     group:
-  #       kind: run
-  #       isDefault: false
-  - id: build-image
-    apply:
-      component: image-build
-  - id: deployk8s
-    apply:
-      component: kubernetes-deploy
-  - id: deploy
-    composite:
-      commands:
-        - build-image
-        - deployk8s
-      group:
-        kind: deploy
-        isDefault: true
