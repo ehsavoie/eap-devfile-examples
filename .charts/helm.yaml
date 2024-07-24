@@ -1,6 +1,6 @@
 build:
   uri: https://github.com/jbossas/eap-devfile-examples.git
-  ref: eap-8.0.x
+  ref: eapxp-5.0.x
   mode: s2i
   s2i:
     buildApplicationImage: true
