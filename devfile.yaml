@@ -84,9 +84,18 @@ components:
     volume:
       size: 3Gi
 commands:
+  - id: package
+    exec:
+      label: "InnerLoop 01 - Build the application."
+      component: tools
+      commandLine: mvn package -Ddev
+      workingDir: ${PROJECT_SOURCE}
+      group:
+        kind: build
+        isDefault: true
   - id: run
     exec:
-      label: "InnerLoop 01 - Run the server in dev mode."
+      label: "InnerLoop 02 - Run the server in dev mode."
       component: tools
       commandLine: mvn wildfly-jar:dev -Dwildfly.bootable.arguments="-Djboss.node.name=localhost" && tail -f /projects/eap-devfile-examples/target/wildfly-jar-dev-stdout.log
       workingDir: ${PROJECT_SOURCE}
@@ -95,7 +104,7 @@ commands:
         isDefault: true
   - id: debug
     exec:
-      label: "InnerLoop 02 - Debug the server in dev mode."
+      label: "InnerLoop 03 - Debug the server in dev mode."
       component: tools
       commandLine: mvn -Dwildfly.bootable.arguments="-Djboss.node.name=localhost" -Dwildfly.bootable.jvmArguments="-agentlib:jdwp=transport=dt_socket,address=0.0.0.0:${DEBUG_PORT},server=y,suspend=n" wildfly-jar:dev && tail -f /projects/eap-devfile-examples/target/wildfly-jar-dev-stdout.log
       workingDir: ${PROJECT_SOURCE}
@@ -104,7 +113,7 @@ commands:
         isDefault: true
   - id: shutdown
     exec:
-      label: "InnerLoop 03 - Shutdown the server."
+      label: "InnerLoop 04 - Shutdown the server."
       component: tools
       commandLine: mvn wildfly-jar:shutdown && pkill -9 -f tail
       workingDir: ${PROJECT_SOURCE}
@@ -112,15 +121,6 @@ commands:
       group:
         kind: run
         isDefault: false  
-  - id: package
-    exec:
-      label: "InnerLoop 04 - Build the application."
-      component: tools
-      commandLine: mvn package -Ddev
-      workingDir: ${PROJECT_SOURCE}
-      group:
-        kind: build
-        isDefault: true
   - id: deploy-image
     exec:
       label: "OuterLoop 01 - Deploy Image into OpenShift."
