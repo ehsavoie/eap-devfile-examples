@@ -1,7 +1,7 @@
 build:
   uri: https://github.com/jbossas/eap-devfile-examples.git
-  ref: eap-8.0.x
-  mode: s2i
+  ref: eapxp-bootable-5.0.x
+  mode: bootable-jar
   s2i:
     buildApplicationImage: true
     kind: DockerImage
