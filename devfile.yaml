@@ -106,7 +106,7 @@ commands:
     exec:
       label: "InnerLoop 03 - Shutdown the server."
       component: tools
-      commandLine: mvn wildfly-jar:shutdown
+      commandLine: mvn wildfly-jar:shutdown && pkill -9 -f tail
       workingDir: ${PROJECT_SOURCE}
       hotReloadCapable: false
       group:
