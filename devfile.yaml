@@ -88,7 +88,7 @@ commands:
     exec:
       label: "InnerLoop 01 - Run the server in dev mode."
       component: tools
-      commandLine: mvn wildfly-jar:dev -Dwildfly.bootable.arguments="-Djboss.node.name=localhost" && tail -f /dev/null
+      commandLine: mvn wildfly-jar:dev -Dwildfly.bootable.arguments="-Djboss.node.name=localhost" && tail -f /projects/eap-devfile-examples/target/wildfly-jar-dev-stdout.log
       workingDir: ${PROJECT_SOURCE}
       group:
         kind: run
@@ -97,7 +97,7 @@ commands:
     exec:
       label: "InnerLoop 02 - Debug the server in dev mode."
       component: tools
-      commandLine: mvn -Dwildfly.bootable.arguments="-Djboss.node.name=localhost" -Dwildfly.bootable.jvmArguments="-agentlib:jdwp=transport=dt_socket,address=0.0.0.0:${DEBUG_PORT},server=y,suspend=n" wildfly-jar:dev && tail -f /dev/null
+      commandLine: mvn -Dwildfly.bootable.arguments="-Djboss.node.name=localhost" -Dwildfly.bootable.jvmArguments="-agentlib:jdwp=transport=dt_socket,address=0.0.0.0:${DEBUG_PORT},server=y,suspend=n" wildfly-jar:dev && tail -f /projects/eap-devfile-examples/target/wildfly-jar-dev-stdout.log
       workingDir: ${PROJECT_SOURCE}
       group:
         kind: debug
